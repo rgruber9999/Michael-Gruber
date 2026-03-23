@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Michael Gruber – Architect & Artist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #f5f0e8;
+      --warm-white: #faf8f4;
+      --charcoal: #1a1a1a;
+      --dark: #2c2c2c;
+      --mid: #555;
+      --light: #888;
+      --lighter: #bbb;
+      --border: #e0d8cc;
+      --accent: #8b6914;
+      --accent-light: #c4973a;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Inter', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--warm-white);
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 60px;
+      height: 72px;
+      background: rgba(250,248,244,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--charcoal);
+      text-decoration: none;
+      letter-spacing: 2px;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 72px;
+    }
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 60px 80px 80px;
+      background: var(--warm-white);
+    }
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.3s;
+    }
+    .hero-name {
+      font-family: var(--font-serif);
+      font-size: clamp(3.5rem, 5vw, 6rem);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--charcoal);
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.5s;
+    }
+    .hero-name em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-subtitle {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      font-weight: 300;
+      color: var(--mid);
+      margin-bottom: 32px;
+      letter-spacing: 1px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.7s;
+    }
+    .hero-location {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--light);
+      letter-spacing: 1px;
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.9s;
+    }
+    .hero-location::before {
+      content: '';
+      width: 20px;
+      height: 1px;
+      background: var(--lighter);
+    }
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 1.1s;
+    }
+    .btn {
+      padding: 13px 30px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-dark {
+      background: var(--charcoal);
+      color: var(--cream);
+    }
+    .btn-dark:hover { background: var(--accent); }
+    .btn-outline {
+      background: transparent;
+      color: var(--charcoal);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    .hero-right {
+      position: relative;
+      background: var(--cream);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-canvas {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0; left: 0;
+    }
+    .hero-right-text {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 40px;
+    }
+    .dual-discipline {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .discipline {
+      text-align: center;
+    }
+    .discipline-num {
+      font-family: var(--font-serif);
+      font-size: 5rem;
+      font-weight: 300;
+      color: rgba(139,105,20,0.15);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .discipline-label {
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--charcoal);
+      letter-spacing: 3px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 1.3s;
+    }
+    .discipline-sub {
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--light);
+      margin-top: 6px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 1.5s;
+    }
+    .discipline-divider {
+      width: 1px;
+      height: 40px;
+      background: var(--border);
+      margin: 0 auto;
+    }
+
+    /* SECTIONS */
+    .section {
+      padding: 120px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      font-weight: 300;
+      color: var(--charcoal);
+      line-height: 1.15;
+      margin-bottom: 24px;
+    }
+    .section-title em { font-style: italic; color: var(--accent); }
+    .section-body {
+      font-size: 1rem;
+      color: var(--mid);
+      line-height: 1.85;
+      max-width: 620px;
+    }
+
+    /* ABOUT */
+    #about {
+      background: var(--cream);
+    }
+    .about-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 120px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: center;
+    }
+    .about-text .section-body { margin-bottom: 20px; }
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 48px;
+    }
+    .stat {
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+    .stat-num {
+      font-family: var(--font-serif);
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--light);
+    }
+    .about-visual {
+      position: relative;
+    }
+    .about-quote {
+      font-family: var(--font-serif);
+      font-size: 1.7rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--charcoal);
+      line-height: 1.5;
+      border-left: 2px solid var(--accent);
+      padding-left: 32px;
+    }
+    .about-quote cite {
+      display: block;
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      font-style: normal;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--light);
+      margin-top: 20px;
+    }
+
+    /* WORK GRID */
+    #work { background: var(--warm-white); }
+    .work-intro {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 120px 80px 60px;
+    }
+    .work-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 80px 120px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2px;
+    }
+    .work-card {
+      position: relative;
+      aspect-ratio: 4/3;
+      background: var(--cream);
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .work-card:first-child {
+      grid-column: span 2;
+      aspect-ratio: 16/9;
+    }
+    .work-card-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .work-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(26,26,26,0);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 28px;
+      transition: background 0.3s ease;
+    }
+    .work-card:hover .work-card-overlay { background: rgba(26,26,26,0.75); }
+    .work-card-title {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: #fff;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+    }
+    .work-card-type {
+      font-size: 0.68rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease 0.05s;
+      margin-top: 4px;
+    }
+    .work-card:hover .work-card-title,
+    .work-card:hover .work-card-type {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* DISCIPLINES */
+    #disciplines {
+      background: var(--charcoal);
+    }
+    .disciplines-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 120px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+    }
+    .discipline-card {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 40px;
+    }
+    .discipline-card .section-label { color: var(--accent-light); }
+    .discipline-card .section-title { color: #f0ece4; }
+    .discipline-card .section-body { color: rgba(255,255,255,0.55); }
+    .discipline-features {
+      margin-top: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: rgba(255,255,255,0.65);
+      font-size: 0.88rem;
+    }
+    .feature::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--accent-light);
+      flex-shrink: 0;
+    }
+
+    /* CONTACT */
+    #contact {
+      background: var(--cream);
+    }
+    .contact-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 120px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: start;
+    }
+    .contact-info .section-body { margin-bottom: 48px; }
+    .contact-detail {
+      margin-bottom: 20px;
+    }
+    .contact-detail-label {
+      font-size: 0.68rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--light);
+      margin-bottom: 4px;
+    }
+    .contact-detail-value {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--charcoal);
+    }
+    .contact-detail-value a {
+      color: var(--charcoal);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .contact-detail-value a:hover { color: var(--accent); }
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .form-group label {
+      font-size: 0.68rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--light);
+    }
+    .form-group input,
+    .form-group textarea {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      padding: 14px 16px;
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      color: var(--charcoal);
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--accent); }
+    .form-group textarea { min-height: 120px; }
+
+    /* FOOTER */
+    footer {
+      background: var(--charcoal);
+      padding: 40px 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 2px;
+    }
+    .footer-copy {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 1px;
+    }
+    .footer-claude {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 1px;
+      text-align: right;
+    }
+    .footer-claude span { color: rgba(196,151,58,0.6); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      #hero { grid-template-columns: 1fr; }
+      .hero-left { padding: 60px 32px; }
+      .hero-right { min-height: 50vh; }
+      .about-inner, .contact-inner, .disciplines-inner { grid-template-columns: 1fr; gap: 48px; padding: 80px 32px; }
+      .work-intro, .work-grid { padding-left: 32px; padding-right: 32px; }
+      .work-grid { grid-template-columns: 1fr 1fr; }
+      .work-card:first-child { grid-column: span 2; }
+      .section { padding: 80px 32px; }
+      footer { padding: 32px 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">Michael <span>Gruber</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#disciplines">Disciplines</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Architect &amp; Artist</p>
+      <h1 class="hero-name">Michael<br><em>Gruber</em></h1>
+      <p class="hero-subtitle">Where structure meets expression.</p>
+      <p class="hero-location">Lexington, Massachusetts</p>
+      <div class="hero-cta">
+        <a href="#work" class="btn btn-dark">View Work</a>
+        <a href="#contact" class="btn btn-outline">Get In Touch</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <canvas class="hero-canvas" id="heroCanvas"></canvas>
+      <div class="hero-right-text">
+        <div class="dual-discipline">
+          <div class="discipline">
+            <div class="discipline-num">I</div>
+            <div class="discipline-label">Architecture</div>
+            <div class="discipline-sub">Design &amp; Space</div>
+          </div>
+          <div class="discipline-divider"></div>
+          <div class="discipline">
+            <div class="discipline-num">II</div>
+            <div class="discipline-label">Painting</div>
+            <div class="discipline-sub">Canvas &amp; Color</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-inner">
+      <div class="about-text reveal">
+        <p class="section-label">About</p>
+        <h2 class="section-title">Two disciplines,<br>one <em>vision</em></h2>
+        <p class="section-body">
+          Michael Gruber is an architect and painter based in Lexington, Massachusetts. His work explores the boundary between the built environment and artistic expression — bringing the same sensitivity to form, light, and material whether designing a space or composing a canvas.
+        </p>
+        <p class="section-body">
+          Rooted in the rich architectural and cultural landscape of New England, Michael's practice is defined by an attention to detail, a respect for context, and a belief that beauty and function are never truly separate.
+        </p>
+        <div class="about-stats">
+          <div class="stat reveal">
+            <div class="stat-num">2</div>
+            <div class="stat-label">Disciplines</div>
+          </div>
+          <div class="stat reveal">
+            <div class="stat-num">MA</div>
+            <div class="stat-label">Lexington, Mass.</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-visual reveal">
+        <blockquote class="about-quote">
+          "Architecture is inhabited sculpture — and painting is architecture made weightless."
+          <cite>— Michael Gruber</cite>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work">
+    <div class="work-intro reveal">
+      <p class="section-label">Selected Work</p>
+      <h2 class="section-title">Built &amp; <em>painted</em></h2>
+    </div>
+    <div class="work-grid">
+      <div class="work-card reveal">
+        <canvas class="work-card-canvas" id="card1"></canvas>
+        <div class="work-card-overlay">
+          <div class="work-card-title">New England Residence</div>
+          <div class="work-card-type">Architecture</div>
+        </div>
+      </div>
+      <div class="work-card reveal">
+        <canvas class="work-card-canvas" id="card2"></canvas>
+        <div class="work-card-overlay">
+          <div class="work-card-title">Autumn Study</div>
+          <div class="work-card-type">Oil on Canvas</div>
+        </div>
+      </div>
+      <div class="work-card reveal">
+        <canvas class="work-card-canvas" id="card3"></canvas>
+        <div class="work-card-overlay">
+          <div class="work-card-title">Lexington Commons</div>
+          <div class="work-card-type">Architecture</div>
+        </div>
+      </div>
+      <div class="work-card reveal">
+        <canvas class="work-card-canvas" id="card4"></canvas>
+        <div class="work-card-overlay">
+          <div class="work-card-title">Light on Water</div>
+          <div class="work-card-type">Watercolor</div>
+        </div>
+      </div>
+      <div class="work-card reveal">
+        <canvas class="work-card-canvas" id="card5"></canvas>
+        <div class="work-card-overlay">
+          <div class="work-card-title">Studio Interior</div>
+          <div class="work-card-type">Painting</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DISCIPLINES -->
+  <section id="disciplines">
+    <div class="disciplines-inner">
+      <div class="discipline-card reveal">
+        <p class="section-label">Architecture</p>
+        <h2 class="section-title">Space that<br><em>speaks</em></h2>
+        <p class="section-body">
+          From residential homes to civic spaces, Michael approaches every project with a deep understanding of how people inhabit and experience the built environment. His architecture balances modernist clarity with warmth and human scale.
+        </p>
+        <div class="discipline-features">
+          <div class="feature">Residential Design</div>
+          <div class="feature">Interior Architecture</div>
+          <div class="feature">Historic Preservation</div>
+          <div class="feature">Site &amp; Landscape Integration</div>
+        </div>
+      </div>
+      <div class="discipline-card reveal">
+        <p class="section-label">Painting</p>
+        <h2 class="section-title">Color that<br><em>breathes</em></h2>
+        <p class="section-body">
+          Michael's paintings reflect a lifelong dialogue between observation and abstraction. Drawing inspiration from the New England landscape — its seasons, its light, its quiet — his canvases carry the same spatial awareness that defines his architecture.
+        </p>
+        <div class="discipline-features">
+          <div class="feature">Oil on Canvas</div>
+          <div class="feature">Watercolor</div>
+          <div class="feature">Landscape &amp; Plein Air</div>
+          <div class="feature">Abstract &amp; Structural Studies</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="contact-info reveal">
+        <p class="section-label">Contact</p>
+        <h2 class="section-title">Let's create<br>something <em>together</em></h2>
+        <p class="section-body">
+          Whether you're interested in an architectural project, acquiring a painting, or simply want to connect — reach out and start a conversation.
+        </p>
+        <div class="contact-detail">
+          <div class="contact-detail-label">Location</div>
+          <div class="contact-detail-value">Lexington, Massachusetts</div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-label">Discipline</div>
+          <div class="contact-detail-value">Architecture &amp; Painting</div>
+        </div>
+      </div>
+      <div class="reveal">
+        <form class="contact-form" onsubmit="return false;">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea placeholder="Tell me about your project or inquiry..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-dark" style="align-self:flex-start;">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Michael Gruber</div>
+    <div class="footer-copy">&copy; 2026 Michael Gruber. All Rights Reserved.</div>
+    <div class="footer-claude">Built with <span>Claude AI</span> by Anthropic</div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Generative art canvas for hero
+    function drawHero() {
+      const canvas = document.getElementById('heroCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      const w = canvas.width, h = canvas.height;
+
+      ctx.fillStyle = '#f0ebe0';
+      ctx.fillRect(0, 0, w, h);
+
+      // Architectural grid lines
+      ctx.strokeStyle = 'rgba(139,105,20,0.08)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 40) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (let y = 0; y < h; y += 40) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      // Abstract architectural forms
+      const forms = [
+        { x: 0.15, y: 0.2, w: 0.25, h: 0.6 },
+        { x: 0.45, y: 0.35, w: 0.18, h: 0.45 },
+        { x: 0.68, y: 0.15, w: 0.22, h: 0.7 },
+      ];
+      forms.forEach((f, i) => {
+        const alpha = 0.06 + i * 0.03;
+        ctx.fillStyle = `rgba(44,44,44,${alpha})`;
+        ctx.fillRect(f.x * w, f.y * h, f.w * w, f.h * h);
+        ctx.strokeStyle = `rgba(139,105,20,${alpha * 2})`;
+        ctx.lineWidth = 0.5;
+        ctx.strokeRect(f.x * w, f.y * h, f.w * w, f.h * h);
+      });
+
+      // Painterly brushstrokes
+      const colors = ['rgba(196,151,58,0.12)', 'rgba(139,105,20,0.08)', 'rgba(180,120,30,0.1)'];
+      for (let i = 0; i < 8; i++) {
+        ctx.beginPath();
+        const x = Math.random() * w;
+        const y = Math.random() * h;
+        const len = 60 + Math.random() * 120;
+        const angle = Math.random() * Math.PI;
+        ctx.moveTo(x, y);
+        ctx.bezierCurveTo(
+          x + Math.cos(angle) * len * 0.3, y + Math.sin(angle) * len * 0.3,
+          x + Math.cos(angle) * len * 0.7, y + Math.sin(angle) * len * 0.7,
+          x + Math.cos(angle) * len, y + Math.sin(angle) * len
+        );
+        ctx.strokeStyle = colors[i % colors.length];
+        ctx.lineWidth = 3 + Math.random() * 6;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+      }
+    }
+
+    // Work card canvases
+    function drawCard(id, type) {
+      const canvas = document.getElementById(id);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      const w = canvas.width, h = canvas.height;
+
+      if (type === 'arch') {
+        // Architectural drawing style
+        ctx.fillStyle = '#ece6d8';
+        ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = 'rgba(44,44,44,0.15)';
+        ctx.lineWidth = 0.5;
+        for (let x = 0; x < w; x += 30) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+        for (let y = 0; y < h; y += 30) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+        // Building silhouette
+        ctx.fillStyle = 'rgba(44,44,44,0.12)';
+        ctx.fillRect(w*0.1, h*0.3, w*0.8, h*0.6);
+        ctx.fillStyle = 'rgba(44,44,44,0.18)';
+        ctx.fillRect(w*0.3, h*0.15, w*0.4, h*0.75);
+        // Windows
+        ctx.fillStyle = 'rgba(196,151,58,0.25)';
+        for (let row = 0; row < 4; row++) {
+          for (let col = 0; col < 3; col++) {
+            ctx.fillRect(w*0.35 + col*w*0.1, h*0.25 + row*h*0.15, w*0.07, h*0.09);
+          }
+        }
+        ctx.strokeStyle = 'rgba(139,105,20,0.3)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(w*0.1, h*0.3, w*0.8, h*0.6);
+      } else if (type === 'paint-warm') {
+        // Warm painting
+        const grad = ctx.createLinearGradient(0, 0, w, h);
+        grad.addColorStop(0, '#d4884a');
+        grad.addColorStop(0.4, '#c47830');
+        grad.addColorStop(0.7, '#8b4513');
+        grad.addColorStop(1, '#3d2010');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+        for (let i = 0; i < 20; i++) {
+          ctx.beginPath();
+          const bx = Math.random() * w, by = Math.random() * h;
+          ctx.arc(bx, by, 4 + Math.random() * 30, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,${150+Math.random()*80},${50+Math.random()*50},0.15)`;
+          ctx.fill();
+        }
+        ctx.fillStyle = 'rgba(255,220,100,0.2)';
+        ctx.fillRect(0, h*0.55, w, h*0.45);
+      } else if (type === 'paint-cool') {
+        // Cool painting
+        const grad = ctx.createLinearGradient(0, 0, 0, h);
+        grad.addColorStop(0, '#6a9bc4');
+        grad.addColorStop(0.5, '#4a7a9b');
+        grad.addColorStop(1, '#1a3a5c');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = 'rgba(255,255,255,0.08)';
+        for (let i = 0; i < 6; i++) {
+          ctx.fillRect(0, h*(0.1+i*0.15), w, 2 + Math.random()*4);
+        }
+      } else if (type === 'paint-neutral') {
+        const grad = ctx.createRadialGradient(w*0.5, h*0.4, 0, w*0.5, h*0.4, w*0.7);
+        grad.addColorStop(0, '#e8d5b0');
+        grad.addColorStop(0.5, '#c4a870');
+        grad.addColorStop(1, '#7a6030');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+      }
+    }
+
+    function initAll() {
+      drawHero();
+      drawCard('card1', 'arch');
+      drawCard('card2', 'paint-warm');
+      drawCard('card3', 'arch');
+      drawCard('card4', 'paint-cool');
+      drawCard('card5', 'paint-neutral');
+    }
+
+    window.addEventListener('load', initAll);
+    window.addEventListener('resize', initAll);
+  </script>
+</body>
+</html>
